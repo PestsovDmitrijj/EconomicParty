@@ -1,4 +1,5 @@
 from regularPoligon import RegularPoligon
+import copy
 
 # spatial orientation for hexagons
 cfsh = {60: [0, 1, 240], 120: [-1, 1, 300], 180: [-1, 0, 360], 240: [0, -1, 60], 300: [1, -1, 120], 360: [1, 0, 180]}
@@ -62,7 +63,7 @@ def cpo_bt(lo=list):
         langle += step
 
 
-#selection for the next iteration
+# selection for the next iteration
 def sni(objects, index):
     obj = objects[index]
     result = []
@@ -75,14 +76,14 @@ def sni(objects, index):
     return result
 
 
-#create controller for 2d space; create level in hexaspace
+# create controller for 2d space; create level in hexaspace
 def cl_2d(lst, s, f):
     for i in range(s, f):
         lst.extend(cr_nbhs(lst[i]))
         cpo_bt(sni(lst, i))
 
 
-#God of 2dHexaSpace
+# God of 2dHexaSpace
 def hs2d(hs, r):
     if len(hs) == 0:
         hs.append(RegularPoligon([0, 0, 0], 6))
@@ -92,6 +93,113 @@ def hs2d(hs, r):
     s = 1
     for i in range(1, r - 1):
         f = len(hs)
-        print(s, f)
         cl_2d(hs, s, f)
         s += i * 6
+
+
+def print_results(lst):
+    for x in lst:
+        print(x.get_cors(), '=>', x.get_angles())
+
+
+# good function for path finding
+def go(start, path, space):
+    for obj in space:
+        if obj.get_cors() == start:
+            sp = obj
+
+    for point in path:
+        for x in sp.get_angles():
+            if sp.get_angles()[x] == point:
+                for obj in space:
+                    if obj.get_cors() == point:
+                        print(sp.get_cors(), '=>', x, ':', sp.get_angles()[x])
+                        sp = obj
+
+
+# copy the space for sphere
+def cfs(nsp):
+    # sort by z parameter
+    z = 0
+    sort = []
+    sg = []
+    for x in nsp:
+        if x.get_cors()[2] == z and nsp.index(x) != len(nsp) - 1:
+            sg.append(x)
+        elif x.get_cors()[2] != z:
+            sort.append(copy.deepcopy(sg))
+            sg.clear()
+            sg.append(x)
+            z += 1
+        elif nsp.index(x) == len(nsp) - 1:
+            sg.append(x)
+            sort.append(copy.deepcopy(sg))
+
+    return sort
+
+
+#correcting links
+def cor_link(space):
+    #get equator
+    eq = space[len(space) - 1].get_cors()[2] - 1
+    for x in space:
+        for y in x.get_angles():
+            if x.get_angles()[y] is not None:
+                if x.get_angles()[y][2] - eq < 0:
+                    #different
+                    df = (x.get_angles()[y][2] - eq) * -2
+                    x.get_angles()[y][2] += df
+
+    return space
+
+
+#change coordinates of sides in hexagons
+def ccsh(space):
+    for x in space:
+        angle = 60
+        for a in range(1, 4):
+            aa = angle * a
+            #addition value
+            av = x.get_angles()[aa]
+            x.get_angles()[aa] = x.get_angles()[aa + 180]
+            x.get_angles()[aa + 180] = av
+
+
+#change z coordinate in sorted copy of space
+def ccscs(space):
+    nsp = copy.deepcopy(space)
+    sorted = cfs(nsp)
+    #get last coordinate z
+    z = sorted[len(sorted) - 1][len(sorted[len(sorted) - 1]) - 1].get_cors()[2] + 1
+    #increase z coordinate
+    for x in range(1, len(sorted) + 1):
+        z += 1
+        for y in sorted[-x]:
+            y.get_cors()[2] = z
+
+    result = []
+    for x in sorted:
+        result += x
+    result = cor_link(result)
+    ccsh(result)
+
+    return result
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
