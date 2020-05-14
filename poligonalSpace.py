@@ -128,7 +128,7 @@ def cfs(nsp):
             sg.append(x)
         elif x.get_cors()[2] != z:
             sort.append(copy.deepcopy(sg))
-            sg.clear()
+            sg = []
             sg.append(x)
             z += 1
         elif nsp.index(x) == len(nsp) - 1:

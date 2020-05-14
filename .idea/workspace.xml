@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="47d7c873-4434-45f9-b0b9-080fddd419fb" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/test_ps_square.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/poligonalSpace.py" beforeDir="false" afterPath="$PROJECT_DIR$/poligonalSpace.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test_poligonalSpace.py" beforeDir="false" afterPath="$PROJECT_DIR$/test_poligonalSpace.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
